@@ -10,10 +10,12 @@ import {
   getLargestExpense,
   printAllTransactions,
   printSummary,
+  getAverageExpensePerCategory,
 } from './finance.js';
 
 // Main execution
 console.clear();
 printAllTransactions(transactions);
 printSummary(transactions);
+getAverageExpensePerCategory(transactions);
 // End of file

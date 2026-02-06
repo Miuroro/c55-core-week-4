@@ -104,3 +104,40 @@ export function printSummary(transactions) {
 
   console.log(`Total Transactions: ${chalk.bold(transactionCount)}\n`);
 }
+
+// Calculates and returns the average expense amount for each category
+export function getAverageExpensePerCategory(transactions) {
+  const expenses = transactions.filter(
+    (transaction) => transaction.type === 'expense'
+  );
+  const categoryTotals = {};
+  const categoryCounts = {};
+  /**
+   * This loop iterates through each transaction in the `expenses` array.
+   * For each transaction, it updates two objects:
+   * 1. `categoryTotals`: It adds the transaction's `amount` to a running total for its specific `category`.
+   *    If a category is seen for the first time, it's initialized to 0 before adding the amount.
+   * 2. `categoryCounts`: It increments a counter for the transaction's `category`.
+   *    If a category is seen for the first time, its count is initialized to 0 before incrementing.
+   * This effectively calculates both the total amount spent and the number of transactions per category.
+   */
+  for (const { category, amount } of expenses) {
+    categoryTotals[category] = (categoryTotals[category] || 0) + amount;
+    categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+  }
+
+  const averages = {}; // storing average expense per category
+  for (const category in categoryTotals) { 
+    const total = categoryTotals[category];
+    const count = categoryCounts[category];
+    averages[category] = +(total / count).toFixed(2); // Calculate average and round to 2 decimal places
+  }
+
+  console.log(chalk.bold('Average Expense per Category:'));
+  for (const category in averages) {
+    const average = averages[category];
+    console.log(`- ${category}: ${chalk.red(`€${average}`)}`);
+  }
+
+  return averages;
+}
